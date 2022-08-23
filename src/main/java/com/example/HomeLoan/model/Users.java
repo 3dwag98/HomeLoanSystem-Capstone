@@ -7,18 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Data
@@ -27,37 +20,32 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Users {
-	
+
 	@Id
 	@Column(name = "user_id")
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	private int userId;	
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int userId;
 
-	@Column(name="user_name")
+	@Column(name = "user_name")
 	@NotEmpty
 	private String name;
 
-	
-	@Column(name="user_password")
+	@Column(name = "user_password")
 	@NotEmpty
-	@Size(min=4 , max=10 , message="invalid password")
+	@Size(min = 4, max = 10, message = "invalid password")
 	private String password;
-	
-	
 
-	@Column(name="user_email",unique = true)
-	@Email(message="invalid email")
+	@Column(name = "user_email", unique = true)
+	@Email(message = "invalid email")
 	private String email;
-	
-	
-	@Column(name="user_phone")
+
+	@Column(name = "user_phone")
 	private long phone;
 
-	@Column(name="user_salary")
+	@Column(name = "user_salary")
 	@NotEmpty
 	private long salary;
-	
+
 	public int getUserId() {
 		return userId;
 	}
@@ -89,8 +77,7 @@ public class Users {
 	public void setPhone(long phone) {
 		this.phone = phone;
 	}
-	
-	
+
 	public String getName() {
 		return name;
 	}
@@ -106,8 +93,7 @@ public class Users {
 	public void setSalary(long salary) {
 		this.salary = salary;
 	}
-	
-	
+
 	public Users(int userId, String password, String email, long phone) {
 		// TODO Auto-generated constructor stub
 		this.userId = userId;
@@ -116,7 +102,6 @@ public class Users {
 		this.phone = phone;
 	}
 
-	
 	public Users(int userId, @NotEmpty String name,
 			@NotEmpty @Size(min = 4, max = 10, message = "invalid password") String password,
 			@Email(message = "invalid email") String email, long phone, @NotEmpty long salary) {
@@ -128,7 +113,6 @@ public class Users {
 		this.salary = salary;
 	}
 
-	
 	public Users() {
 		// TODO Auto-generated constructor stub
 	}
@@ -139,6 +123,4 @@ public class Users {
 				+ phone + ", salary=" + salary + "]";
 	}
 
-
-	
 }

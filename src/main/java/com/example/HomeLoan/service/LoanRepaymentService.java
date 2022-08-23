@@ -1,16 +1,15 @@
 package com.example.HomeLoan.service;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.example.HomeLoan.model.SavingAccount;
-import com.example.HomeLoan.model.Users;
-import com.example.HomeLoan.repo.SavingAccountRepositiory;
+import javax.mail.MessagingException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +17,16 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-
 import com.example.HomeLoan.model.LoanAccount;
-import com.example.HomeLoan.model.Repayment;
+import com.example.HomeLoan.model.LoanRepayment;
+import com.example.HomeLoan.model.LoanRepayment;
+import com.example.HomeLoan.model.SavingAccount;
+import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.LoanAccountRepository;
 //import com.example.HomeLoan.repo.LoanRepayScheduleRepository;
 //import com.example.HomeLoan.repo.LoanScheduleRepository;
 import com.example.HomeLoan.repo.RepaymentRepository;
-
-import javax.mail.MessagingException;
+import com.example.HomeLoan.repo.SavingAccountRepositiory;
 
 @Service
 public class LoanRepaymentService {
@@ -63,16 +63,16 @@ public class LoanRepaymentService {
 		return loanaccountRepo.findByLoanAccId(id);
 	}
 
-	public List<Repayment> getLoanSchedulebyID(int LoanId) {
+	public List<LoanRepayment> getLoanSchedulebyID(int LoanId) {
 		return loanRepaymentRepo.findRepaymentDetailsByAccountNo(LoanId);
 	}
 
 	public String updateRepayment(int LoanId) {
 
-		List<Repayment> existingPayment = loanRepaymentRepo.findRepaymentDetailsByAccountNo(LoanId);
+		List<LoanRepayment> existingPayment = loanRepaymentRepo.findRepaymentDetailsByAccountNo(LoanId);
 //		int count = 0;
 		int count = 0;
-		for (Repayment product : existingPayment) {
+		for (LoanRepayment product : existingPayment) {
 			logger.info(product.getStatus());
 			if (product.getStatus().equalsIgnoreCase("paid")) {
 				++count;
@@ -84,7 +84,7 @@ public class LoanRepaymentService {
 
 			logger.info("----------------------------");
 
-			for (Repayment product : existingPayment) {
+			for (LoanRepayment product : existingPayment) {
 				product.setOutstanding(0.0);
 				product.setStatus("paid");
 				loanRepaymentRepo.save(product);
@@ -111,7 +111,7 @@ public class LoanRepaymentService {
 		return (principle * mothlyRateOfInterest * Math.pow(1 + mothlyRateOfInterest, tenureInMonths)) / (Math.pow(1 + mothlyRateOfInterest, tenureInMonths) - 1);
 	}
 
-	List<Repayment> repaySchedule = new ArrayList<Repayment>();
+	List<LoanRepayment> repaySchedule = new ArrayList<LoanRepayment>();
 
 	public Date addMonths(Date date, int months) {
 		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -124,7 +124,7 @@ public class LoanRepaymentService {
 	}
 
 
-	public List<Repayment> generateRepaymentSchedule(Date currdate, double principleAmount, double interestRate, double year, double month) {
+	public List<LoanRepayment> generateRepaymentSchedule(Date currdate, double principleAmount, double interestRate, double year, double month) {
 		LoanRepaymentService pesObj = new LoanRepaymentService();
 		logger.info("Entere generateRepaymentSchedule");
 		double p = principleAmount;
@@ -140,7 +140,7 @@ public class LoanRepaymentService {
 			double paidPrinciple = pesObj.calPaidPrinciple(emi, mInterest);//emi - mInterest;
 			outstanding = outstanding - paidPrinciple;
 
-			Repayment obj = new Repayment();
+			LoanRepayment obj = new LoanRepayment();
 			int monthly_inc = 1;
 
 			obj.setOutstanding(outstanding);
@@ -170,8 +170,8 @@ public class LoanRepaymentService {
 		if (paidmonthscount >= 3) {
 
 			String currentmonthemi = "select date,interest,principle,outstanding,emi from repayment where loan_account_id = ?  and status='paid' order by date DESC limit 1";
-			Repayment repayment = (Repayment) jdbcTemplate.queryForObject(currentmonthemi, new Object[]{loanaccountno},
-					new BeanPropertyRowMapper(Repayment.class));
+			LoanRepayment repayment = (LoanRepayment) jdbcTemplate.queryForObject(currentmonthemi, new Object[]{loanaccountno},
+					new BeanPropertyRowMapper(LoanRepayment.class));
 
 			System.out.println(repayment);
 			Date emiDate = repayment.getDate();
@@ -229,8 +229,8 @@ public class LoanRepaymentService {
 
 
 		String currentmonthemi = "select id as repaymentid,date,interest,principle,outstanding,emi from repayment where loan_account_id = ?  and status='Pending' order by date ASC limit 1";
-		Repayment repayment = (Repayment) jdbcTemplate.queryForObject(currentmonthemi, new Object[]{loanaccountno},
-				new BeanPropertyRowMapper(Repayment.class));
+		LoanRepayment repayment = (LoanRepayment) jdbcTemplate.queryForObject(currentmonthemi, new Object[]{loanaccountno},
+				new BeanPropertyRowMapper(LoanRepayment.class));
 		logger.info("repayment" + repayment.getRepaymentid());
 		logger.info("loan acc id" + loanAccount.getLoanAccId());
 		if (currentBalance > repayment.getEmi()) {

@@ -25,7 +25,7 @@ import com.example.HomeLoan.service.SavingAccountService;
 import com.example.HomeLoan.service.utility;
 
 @RestController
-@RequestMapping("/SavingAccount")
+@RequestMapping("/saving-account")
 public class SavingAccountController {
 	@Autowired
 	private SavingAccountService service;

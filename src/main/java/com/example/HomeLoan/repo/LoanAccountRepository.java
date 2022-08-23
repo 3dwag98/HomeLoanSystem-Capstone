@@ -15,6 +15,8 @@ public interface LoanAccountRepository extends JpaRepository<LoanAccount, Intege
 	
 	@Query("SELECT COUNT(u) FROM LoanAccount u")
     long countRows();
+	
+	List<LoanAccount> findAll(); 
 
 }
 

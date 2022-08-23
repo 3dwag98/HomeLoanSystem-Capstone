@@ -1,23 +1,18 @@
 package com.example.HomeLoan.service;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.MessagingException;
-import java.util.List;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.HomeLoan.controller.LoanController;
 import com.example.HomeLoan.model.LoanAccount;
-import com.example.HomeLoan.model.Repayment;
+import com.example.HomeLoan.model.LoanRepayment;
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.LoanAccountRepository;
@@ -53,6 +48,8 @@ public class LoanAccountService {
 	@Autowired
 	private EmailService emailService;
 
+	
+	
 	
 	public LoanAccount saveAppliedLoan( LoanAccount obj) {
 
@@ -91,20 +88,21 @@ public class LoanAccountService {
 		
 	}
 	
+	
 	@Async
 	public String populatePaymentDBforNewUser(LoanAccount loanAcc) {
-		List<Repayment> paymentSchedulePerUserList = loanPayService.generateRepaymentSchedule(new java.sql.Date(System.currentTimeMillis()), loanAcc.getAmount(), loanAcc.getInterestRate(), loanAcc.getYear(), loanAcc.getMonth());
+		List<LoanRepayment> paymentSchedulePerUserList = loanPayService.generateRepaymentSchedule(new java.sql.Date(System.currentTimeMillis()), loanAcc.getAmount(), loanAcc.getInterestRate(), loanAcc.getYear(), loanAcc.getMonth());
 		paymentSchedulePerUserList.forEach(payment -> {
 		    payment.setAccountNo(loanAcc.getLoanAccId());
 		    payment.setStatus("Pending");	    
 		});
 		for (int i = 0; i < paymentSchedulePerUserList.size(); i = i + batchSize) {
 			if( i+ batchSize > paymentSchedulePerUserList.size()){
-				List<Repayment> paymenttbatch = paymentSchedulePerUserList.subList(i, paymentSchedulePerUserList.size() - 1);
+				List<LoanRepayment> paymenttbatch = paymentSchedulePerUserList.subList(i, paymentSchedulePerUserList.size() - 1);
 				paymentRepo.saveAll(paymenttbatch);
 			break;
 			}
-			List<Repayment> paymenttbatch = paymentSchedulePerUserList.subList(i, i + batchSize);
+			List<LoanRepayment> paymenttbatch = paymentSchedulePerUserList.subList(i, i + batchSize);
 			paymentRepo.saveAll(paymenttbatch);
 		}
 		return "Success";
