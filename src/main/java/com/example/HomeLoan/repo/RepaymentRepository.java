@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.HomeLoan.model.LoanRepayment;
+import com.example.HomeLoan.model.Repayment;
 
-public interface RepaymentRepository extends JpaRepository<LoanRepayment, Integer> {
+public interface RepaymentRepository extends JpaRepository<Repayment, Integer> {
 		
-	LoanRepayment findRepaymentByAccountNo(Long accountNo);
+	Repayment findRepaymentByAccountNo(Long accountNo);
 	
-	List<LoanRepayment> findRepaymentDetailsByAccountNo(int accountNo);
+	List<Repayment> findRepaymentDetailsByAccountNo(int accountNo);
 
 }
 

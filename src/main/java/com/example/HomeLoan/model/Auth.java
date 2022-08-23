@@ -1,7 +1,7 @@
 package com.example.HomeLoan.model;
 
 
-public class AuthenticationDetails {
+public class Auth {
 	
 	private String emailId;
 	private String password;

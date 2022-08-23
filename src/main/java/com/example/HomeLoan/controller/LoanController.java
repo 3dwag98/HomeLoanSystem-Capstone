@@ -2,6 +2,7 @@ package com.example.HomeLoan.controller;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.HomeLoan.model.LoanAccount;
+import com.example.HomeLoan.model.SavingAccount;
+import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.UserRepository;
 import com.example.HomeLoan.service.LoanAccountService;
 import com.example.HomeLoan.service.SavingAccountService;
@@ -48,7 +51,7 @@ public class LoanController {
 	private utility util;
 
 	@RequestMapping(value = "/applyLoan", produces = "application/json",
-	  		  method = {RequestMethod.GET, RequestMethod.PUT})
+	  		  method = {RequestMethod.GET})
 	public ResponseEntity<?> getAccdetails(HttpSession session)
 	{
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
@@ -64,17 +67,58 @@ public class LoanController {
 	@ResponseBody
 	public ResponseEntity<?> applyForLoan(@RequestBody @Valid  LoanAccount loanAcc ,HttpSession session) {
 		logger.info(loanAcc.getAccountNo());
+		if(util.sessionCheck(session).getStatusCodeValue()==405)
+			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
+		int user_id = (int) session.getAttribute("user_id");
 		Map<String, Object> body = new LinkedHashMap<>();
-		body.put("status","Congrats");
-		return new ResponseEntity<>(body, HttpStatus.OK);		
+		logger.info("createLoanAccount applyForLoan> "+loanAcc);
+
+		double salary  = loanAcc.getSalary();
+		double loanAmt  = loanAcc.getAmount();
+
+		 //check eligible
+		if(loanAccService.isLoanEligible(salary,loanAmt)) {
+			LoanAccount acc = loanAccService.createLoanAccount(loanAcc,user_id);
+			body.put("status","Congrats");
+			body.put("Loan Acc", acc);
+			return new ResponseEntity<>(body, HttpStatus.OK);
+		}
+		else
+		{
+			double eligibleAmt = loanAccService.calculateEligibleLoanAmt(salary);
+			loanAcc.setAmount(eligibleAmt);
+			body.put("status","Pending");
+			body.put("Loan Acc", loanAcc);
+			return new ResponseEntity<>(body, HttpStatus.OK);			
+		}		
+		
 	}
 	
 	@RequestMapping(value = {"/viewloan/{loan_id}"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> viewForLoan(@PathVariable int loan_id,HttpSession session) {
+		if(util.sessionCheck(session).getStatusCodeValue()==405)
+			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
+		int user_id = (int) session.getAttribute("user_id");
 		Map<String, Object> body = new LinkedHashMap<>();
-		body.put("status","Congrats");
-		return new ResponseEntity<>(body, HttpStatus.OK);	
+		LoanAccount loanAcc = loanAccService.getLoanDetails(loan_id);
+		logger.info("createLoanAccount viewForLoan> "+loanAcc.toString());
+		if (loanAcc!= null) {
+			logger.info("loanAcc.getAccountNo(): "+loanAcc.getAccountNo());
+			Optional<Users> user = userRepository.findById(user_id);
+			if(user.get()!= null) {
+				logger.info("loanAcc.user.get() "+user.get());
+				SavingAccount savAcc = savingAccountService.findBysequenceIdAndUser(loanAcc.getAccountNo(), user.get());
+				if(savAcc!= null) {}
+					body.put("Loan Acc", loanAcc);
+			}else {
+				body.put("message","No loan Account has been found with this loan no and user");
+			}
+
+		}else {
+			body.put("message","No loan Account has been found with this loan no and user");
+		}
+		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 	
 

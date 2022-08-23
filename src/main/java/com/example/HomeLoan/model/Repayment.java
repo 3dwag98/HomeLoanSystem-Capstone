@@ -13,40 +13,43 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "loan_repayment")
-public class LoanRepayment {
-
+@Table(name = "repayment")
+public class Repayment {
+	
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer repaymentid;
-
+	
 	@Column(name = "loan_account_id")
 	private int accountNo;
-
-	@Column(name = "date")
+	
+	@Column(name="date")
 	private Date date;
-
-	@Column(name = "emi")
+	
+	@Column(name="emi")
 	private Double emi;
-
-	@Column(name = "principle")
+	
+	@Column(name="principle")
 	private Double principle;
-
-	@Column(name = "interest")
+	
+	@Column(name="interest")
 	private Double interest;
-
-	@Column(name = "outstanding")
+	
+	@Column(name="outstanding")
 	private Double outstanding;
-
-	@Column(name = "status")
+	
+	@Column(name="status")
 	private String status;
 
-	@Column(name = "updated_at")
+
+	
+
+	@Column(name="updated_at")
 	private Date updatedat;
 
-	public LoanRepayment(Integer repaymentid, int accountNo, Date date, Double emi, Double principle, Double interest,
-			Double rate, Double outstanding, String status, Date updatedat) {
+	public Repayment(Integer repaymentid, int  accountNo, Date date, Double emi, Double principle,
+			Double interest, Double rate, Double outstanding, String status, Date updatedat) {
 		super();
 		this.repaymentid = repaymentid;
 		this.accountNo = accountNo;
@@ -59,7 +62,7 @@ public class LoanRepayment {
 		this.updatedat = updatedat;
 	}
 
-	public LoanRepayment() {
+	public Repayment() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -111,6 +114,7 @@ public class LoanRepayment {
 		this.interest = interest;
 	}
 
+
 	public Double getOutstanding() {
 		return outstanding;
 	}
@@ -126,6 +130,8 @@ public class LoanRepayment {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+
 
 	public Date getUpdatedat() {
 		return updatedat;

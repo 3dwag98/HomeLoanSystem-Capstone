@@ -1,87 +1,99 @@
 package com.example.HomeLoan.model;
 
-import javax.persistence.CascadeType;
+
+
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "loan_account")
+/*@AllArgsConstructor
+@NoArgsConstructor*/
 public class LoanAccount {
-
+	
 	@Id
 	@Column(name = "loan_acc_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer loanAccId;
+	
 
 	@Column(name = "saving_acc_no")
 	@NotNull(message = "please select saving account")
 	private int accountNo;
+	
+	@Override
+	public String toString() {
+		return "LoanAccount [loanAccId=" + loanAccId + ", accountNo=" + accountNo + ", amount=" + amount
+				+ ", interestRate=" + interestRate + ", salary=" + salary + ", year=" + year + ", month=" + month
+				+ ", description=" + description + ", status=" + status + ", file=" + file + "]";
+	}
 
 	@NotNull(message = "please fill loan_amount")
-	@Column(name = "loan_amount")
+	@Column(name="loan_amount")
 	private Double amount;
-
+	
 	@NotNull(message = "please fill interest rate")
-	@Column(name = "interest_rate")
+	@Column(name="interest_rate")
 	private Double interestRate;
-
+	
 	@NotNull(message = "please fill salary")
-	@Column(name = "salary")
+	@Column(name="salary")
 	private Double salary;
-
+	
 	@NotNull(message = "please fill year")
-	@Column(name = "tenure")
-	private int tenure;
-
+	@Column(name="year")
+	private int year; 
+	
 	@NotNull(message = "please fill month")
-	@Column(name = "month")
-	private int month;
-
+	@Column(name="month")
+	private int month; 
+	
 	@NotBlank(message = "please fill address")
-	@Lob // Large Objects
+	@Lob  //Large Objects
 	private String description;
-
-	@Column(name = "status")
+	
+	@Column(name="status")
 	private String status;
+	
+	@Column
+	private String file;
 
-
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
-	private Users user;
 	
 	
 	public LoanAccount() {
 		super();
 	}
-	
-	
+
 
 	public LoanAccount(Integer loanAccId, int accountNo, Double amount, Double interestRate, Double salary, int year,
-			int month, String description, String status) {
+			int month, String description, String status, String file) {
 		super();
 		this.loanAccId = loanAccId;
 		this.accountNo = accountNo;
 		this.amount = amount;
 		this.interestRate = interestRate;
 		this.salary = salary;
-		this.tenure = year;
+		this.year = year;
 		this.month = month;
 		this.description = description;
 		this.status = status;
-		
+		this.file = file;
 	}
+
 
 	public Integer getLoanAccId() {
 		return loanAccId;
@@ -123,21 +135,27 @@ public class LoanAccount {
 		this.salary = salary;
 	}
 
+
+
 	public int getYear() {
-		return tenure;
+		return year;
 	}
 
+
 	public void setYear(int year) {
-		this.tenure = year;
+		this.year = year;
 	}
+
 
 	public int getMonth() {
 		return month;
 	}
 
+
 	public void setMonth(int month) {
 		this.month = month;
 	}
+
 
 	public String getDescription() {
 		return description;
@@ -155,12 +173,12 @@ public class LoanAccount {
 		this.status = status;
 	}
 
-	
-	@Override
-	public String toString() {
-		return "LoanAccount [loanAccId=" + loanAccId + ", accountNo=" + accountNo + ", amount=" + amount
-				+ ", interestRate=" + interestRate + ", salary=" + salary + ", year=" + tenure + ", month=" + month
-				+ ", description=" + description + ", status=" + status + "]";
+	public String getFile() {
+		return file;
+	}
+
+	public void setFile(String file) {
+		this.file = file;
 	}
 
 }

@@ -1,10 +1,10 @@
 package com.example.HomeLoan.controller;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.HomeLoan.model.AuthenticationDetails;
+import com.example.HomeLoan.model.Auth;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-@RequestMapping("/login")
 @RestController
 public class LoginController {
 	@Autowired	
@@ -56,7 +50,7 @@ public class LoginController {
 	}
 	
 	@PostMapping(value = "/login")
-	public ResponseEntity<?> loginUser(@RequestBody AuthenticationDetails authenticationDetails, HttpSession session){
+	public ResponseEntity<?> loginUser(@RequestBody Auth authenticationDetails, HttpSession session){
 		Map<String, Object> body = new LinkedHashMap<>();
 		return new ResponseEntity<>(userService.login(authenticationDetails, session), HttpStatus.OK);
 	}

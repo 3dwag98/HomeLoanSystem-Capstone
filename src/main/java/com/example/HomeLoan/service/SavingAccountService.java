@@ -29,10 +29,7 @@ public class SavingAccountService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private EmailService emailService;
-	
+
 	public SavingAccount saveBalance(SavingAccount savAccObj,HttpSession session) {
 		int user_id = (int) session.getAttribute("user_id");
 	    Random rnd = new Random();
@@ -43,15 +40,6 @@ public class SavingAccountService {
 	    	savAccObj.setUser(user.get());
 	    	
 	    }  
-		try {
-			emailService.sendEmail(user.get().getEmail(), "Congrats, Your Saving account has been created \n Your Accounnt id:BARCLAYS_"+String.valueOf(number), "Welcome to Barclays Bank", "batchpb2a@gmail.com");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		return SavAccRepo.save(savAccObj);	
 	}

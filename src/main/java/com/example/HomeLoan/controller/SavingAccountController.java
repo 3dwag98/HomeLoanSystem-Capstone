@@ -2,11 +2,9 @@ package com.example.HomeLoan.controller;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,22 +44,8 @@ public class SavingAccountController {
 
 	}
 
-	@GetMapping(value = "/UserById/{user}")
-	public ResponseEntity<?> findSavingAccountByUserid(@PathVariable int user, HttpSession session) {
-
-		try {
-			Map<String, Object> body = new LinkedHashMap<>();
-			return new ResponseEntity<>(service.findAccountByUserId(user), HttpStatus.OK);
-		} catch (Exception e) {
-
-			return new ResponseEntity<>("Error occurred during fetching saving account", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-
-	}
-
 	@RequestMapping(value = "/applyLoan/{user_id}", produces = "application/json",
-			method = {RequestMethod.GET, RequestMethod.PUT})
+			method = {RequestMethod.GET})
 
 	public ResponseEntity<?> getAccdetails(@PathVariable int user_id, HttpSession session) {
 

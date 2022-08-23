@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.HomeLoan.model.AuthenticationDetails;
+import com.example.HomeLoan.model.Auth;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.UserRepository;
 import javax.servlet.http.HttpServletRequest;
@@ -54,7 +54,7 @@ public class UserServiceImplementation implements UserService{
 	}
 
 	@Override
-	public String login(AuthenticationDetails authenticationDetails,HttpSession session) {
+	public String login(Auth authenticationDetails,HttpSession session) {
 		// TODO Auto-generated method stub
 		Users user = userRepository.findByEmail(authenticationDetails.getEmailId());
 		
@@ -68,6 +68,7 @@ public class UserServiceImplementation implements UserService{
 		}
 		return "no such user found";
 	}
+	
 
 	
 

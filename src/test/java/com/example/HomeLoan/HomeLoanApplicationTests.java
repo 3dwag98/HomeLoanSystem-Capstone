@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.HomeLoan.model.LoanRepayment;
+import com.example.HomeLoan.model.Repayment;
 import com.example.HomeLoan.repo.LoanAccountRepository;
 import com.example.HomeLoan.repo.RepaymentRepository;
 
@@ -30,7 +30,7 @@ class HomeLoanApplicationTests {
 	
 	@Test
 	void testRepaymentdata() {
-		List<LoanRepayment> list = repaymentrepo.findRepaymentDetailsByAccountNo(1);
+		List<Repayment> list = repaymentrepo.findRepaymentDetailsByAccountNo(1);
 //		assertThat(list).size().isGreaterThan(0);		
 		assertEquals(4,(list).size());
 	}

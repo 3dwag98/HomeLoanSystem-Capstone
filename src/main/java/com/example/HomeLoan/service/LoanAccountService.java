@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.example.HomeLoan.model.LoanAccount;
-import com.example.HomeLoan.model.LoanRepayment;
+import com.example.HomeLoan.model.Repayment;
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.LoanAccountRepository;
@@ -44,13 +44,7 @@ public class LoanAccountService {
 	private UserService userService;
 	
 	private final int batchSize = 30;
-	
-	@Autowired
-	private EmailService emailService;
 
-	
-	
-	
 	public LoanAccount saveAppliedLoan( LoanAccount obj) {
 
 		return loanAccrepo.save(obj);
@@ -77,13 +71,8 @@ public class LoanAccountService {
 		loanAcc.setStatus("Approved");
 		loanAcc = loanAccrepo.save(loanAcc);
 		Users user = userService.getUser(user_id).get();
-		try {
-			emailService.sendEmail(user.getEmail(), "Congrats, Your Loan has been Approoved\n Your Accounnt id:"+loanAcc.getLoanAccId(), "Loan Accepted", "batchpb2a@gmail.com");
-			populatePaymentDBforNewUser(loanAcc);
-		} catch (UnsupportedEncodingException | MessagingException e) {
-
-			e.printStackTrace();
-		}
+		//			emailService.sendEmail(user.getEmail(), "Congrats, Your Loan has been Approoved\n Your Accounnt id:"+loanAcc.getLoanAccId(), "Loan Accepted", "batchpb2a@gmail.com");
+		populatePaymentDBforNewUser(loanAcc);
 		return loanAcc;
 		
 	}
@@ -91,18 +80,18 @@ public class LoanAccountService {
 	
 	@Async
 	public String populatePaymentDBforNewUser(LoanAccount loanAcc) {
-		List<LoanRepayment> paymentSchedulePerUserList = loanPayService.generateRepaymentSchedule(new java.sql.Date(System.currentTimeMillis()), loanAcc.getAmount(), loanAcc.getInterestRate(), loanAcc.getYear(), loanAcc.getMonth());
+		List<Repayment> paymentSchedulePerUserList = loanPayService.generateRepaymentSchedule(new java.sql.Date(System.currentTimeMillis()), loanAcc.getAmount(), loanAcc.getInterestRate(), loanAcc.getYear(), loanAcc.getMonth());
 		paymentSchedulePerUserList.forEach(payment -> {
 		    payment.setAccountNo(loanAcc.getLoanAccId());
 		    payment.setStatus("Pending");	    
 		});
 		for (int i = 0; i < paymentSchedulePerUserList.size(); i = i + batchSize) {
 			if( i+ batchSize > paymentSchedulePerUserList.size()){
-				List<LoanRepayment> paymenttbatch = paymentSchedulePerUserList.subList(i, paymentSchedulePerUserList.size() - 1);
+				List<Repayment> paymenttbatch = paymentSchedulePerUserList.subList(i, paymentSchedulePerUserList.size() - 1);
 				paymentRepo.saveAll(paymenttbatch);
 			break;
 			}
-			List<LoanRepayment> paymenttbatch = paymentSchedulePerUserList.subList(i, i + batchSize);
+			List<Repayment> paymenttbatch = paymentSchedulePerUserList.subList(i, i + batchSize);
 			paymentRepo.saveAll(paymenttbatch);
 		}
 		return "Success";
