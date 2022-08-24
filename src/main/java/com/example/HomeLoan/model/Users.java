@@ -9,8 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
 import lombok.Data;
 import lombok.Getter;
+
 import lombok.Setter;
 
 @Data
@@ -73,10 +75,15 @@ public class Users {
 	}
 	
 	public Users(int userId, String password, String email, long phone) {
+		// TODO Auto-generated constructor stub
 		this.userId = userId;
 		this.password = password;
 		this.email = email;
 		this.phone = phone;
+	}
+
+	public Users() {
+		// TODO Auto-generated constructor stub
 	}
 
 

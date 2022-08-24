@@ -33,7 +33,7 @@ public class SavingsAccountController {
 
 	}
 
-	@RequestMapping(value = "/applyLoan/{user_id}", produces = "application/json",
+	@RequestMapping(value = "getSavingsAccount/{user_id}", produces = "application/json",
 			method = {RequestMethod.GET})
 
 	public ResponseEntity<?> getAccdetails(@PathVariable int user_id, HttpSession session) {

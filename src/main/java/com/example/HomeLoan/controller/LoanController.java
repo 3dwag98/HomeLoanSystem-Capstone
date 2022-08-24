@@ -47,18 +47,6 @@ public class LoanController {
 	@Autowired
 	private utility util;
 
-	@RequestMapping(value = "/loanApplication", produces = "application/json",
-	  		  method = {RequestMethod.GET})
-	public ResponseEntity<?> getAccdetails(HttpSession session)
-	{
-		if(util.sessionCheck(session).getStatusCodeValue()==405)
-			return new ResponseEntity<>("Login to continue with your loan application", HttpStatus.METHOD_NOT_ALLOWED);
-		int user_id = (int) session.getAttribute("user_id");
-		Map<String, Object> body = new LinkedHashMap<>();
-		body.put("prefilled details Acc", loanAccService.getLoanDetails(user_id));
-		return new ResponseEntity<>(loanAccService.getLoanDetails(user_id), HttpStatus.OK);
-
-	}
 	
 	@RequestMapping(value = {"/loanApplication","/loanApproval"}, method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
