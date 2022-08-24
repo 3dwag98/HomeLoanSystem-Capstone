@@ -3,10 +3,8 @@ package com.example.HomeLoan.controller;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.HomeLoan.model.LoanAccount;
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
@@ -50,25 +47,25 @@ public class LoanController {
 	@Autowired
 	private utility util;
 
-	@RequestMapping(value = "/applyLoan", produces = "application/json",
+	@RequestMapping(value = "/loanApplication", produces = "application/json",
 	  		  method = {RequestMethod.GET})
 	public ResponseEntity<?> getAccdetails(HttpSession session)
 	{
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
-			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
+			return new ResponseEntity<>("Login to continue with your loan application", HttpStatus.METHOD_NOT_ALLOWED);
 		int user_id = (int) session.getAttribute("user_id");
 		Map<String, Object> body = new LinkedHashMap<>();
-		body.put("prefilled details Acc", savingAccountService.getAccDetails(user_id));
-		return new ResponseEntity<>(savingAccountService.getAccDetails(user_id), HttpStatus.OK);
+		body.put("prefilled details Acc", loanAccService.getLoanDetails(user_id));
+		return new ResponseEntity<>(loanAccService.getLoanDetails(user_id), HttpStatus.OK);
 
 	}
 	
-	@RequestMapping(value = {"/applyLoan","/approveLoan"}, method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = {"/loanApplication","/loanApproval"}, method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> applyForLoan(@RequestBody @Valid  LoanAccount loanAcc ,HttpSession session) {
 		logger.info(loanAcc.getAccountNo());
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
-			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
+			return new ResponseEntity<>("Login to continue with your loan application", HttpStatus.METHOD_NOT_ALLOWED);
 		int user_id = (int) session.getAttribute("user_id");
 		Map<String, Object> body = new LinkedHashMap<>();
 		logger.info("createLoanAccount applyForLoan> "+loanAcc);
@@ -76,8 +73,7 @@ public class LoanController {
 		double salary  = loanAcc.getSalary();
 		double loanAmt  = loanAcc.getAmount();
 
-		 //check eligible
-		if(loanAccService.isLoanEligible(salary,loanAmt)) {
+		if(loanAccService.loanEligibility(salary,loanAmt)) {
 			LoanAccount acc = loanAccService.createLoanAccount(loanAcc,user_id);
 			body.put("status","Congrats");
 			body.put("Loan Acc", acc);
@@ -85,7 +81,7 @@ public class LoanController {
 		}
 		else
 		{
-			double eligibleAmt = loanAccService.calculateEligibleLoanAmt(salary);
+			double eligibleAmt = loanAccService.maxAmountAsLoan(salary);
 			loanAcc.setAmount(eligibleAmt);
 			body.put("status","Pending");
 			body.put("Loan Acc", loanAcc);
@@ -94,11 +90,11 @@ public class LoanController {
 		
 	}
 	
-	@RequestMapping(value = {"/viewloan/{loan_id}"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(value = {"/loanDetails/{loan_id}"}, method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<?> viewForLoan(@PathVariable int loan_id,HttpSession session) {
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
-			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
+			return new ResponseEntity<>("Login to continue with your loan application", HttpStatus.METHOD_NOT_ALLOWED);
 		int user_id = (int) session.getAttribute("user_id");
 		Map<String, Object> body = new LinkedHashMap<>();
 		LoanAccount loanAcc = loanAccService.getLoanDetails(loan_id);
@@ -110,13 +106,10 @@ public class LoanController {
 				logger.info("loanAcc.user.get() "+user.get());
 				SavingAccount savAcc = savingAccountService.findBysequenceIdAndUser(loanAcc.getAccountNo(), user.get());
 				if(savAcc!= null) {}
-					body.put("Loan Acc", loanAcc);
+					body.put("Loan Account", loanAcc);
 			}else {
-				body.put("message","No loan Account has been found with this loan no and user");
+				body.put("message","Sorry. There is no loan account found with this account number.");
 			}
-
-		}else {
-			body.put("message","No loan Account has been found with this loan no and user");
 		}
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}

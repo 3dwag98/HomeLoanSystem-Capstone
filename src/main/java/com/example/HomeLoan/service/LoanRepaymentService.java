@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.HomeLoan.model.LoanAccount;
 import com.example.HomeLoan.model.Repayment;
-import com.example.HomeLoan.model.Repayment;
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.LoanAccountRepository;
@@ -82,12 +81,12 @@ public class LoanRepaymentService {
 				product.setOutstanding(0.0);
 				product.setStatus("paid");
 				loanRepaymentRepo.save(product);
-				logger.info("-----------Upated-----------------");
+				logger.info("-----------Updated-----------------");
 			}
 
-			return "Successfylly updated";
+			return "Updated Successfully";
 		} else {
-			return "Paid EMIs is less than 3 months";
+			return "The EMI has been paid in less than 3 months";
 		}
 
 //		return existingPayment;
@@ -121,7 +120,7 @@ public class LoanRepaymentService {
 	public List<Repayment> generateRepaymentSchedule(Date currdate, double principleAmount, double interestRate,
 			double year, double month) {
 		LoanRepaymentService pesObj = new LoanRepaymentService();
-		logger.info("Entere generateRepaymentSchedule");
+		logger.info("Enter generateRepaymentSchedule");
 		double p = principleAmount;
 		double r = interestRate * 0.01 / 12;
 		double t = (year * 12) + month;
@@ -178,7 +177,7 @@ public class LoanRepaymentService {
 			double rate = 7.0 / 1200;
 			int tenuremonths = loanaccountRepo.findByLoanAccId(loanaccountno).getYear() * 12
 					+ loanaccountRepo.findByLoanAccId(loanaccountno).getMonth();
-			double balance = outstanding - amount;// prepayment done
+			double balance = outstanding - amount;
 			int pendingmonths = tenuremonths - paidmonthscount;
 			double newemi = (balance * rate * Math.pow(1 + rate, pendingmonths))
 					/ (Math.pow(1 + rate, pendingmonths) - 1);
@@ -199,10 +198,10 @@ public class LoanRepaymentService {
 				jdbcTemplate.update(updateSQL, newemi, updatedInterest, balance, updatedPrinciple, loanaccountno);
 			}
 			
-			return "prepaymentdone,outstanding balance" + (outstanding - amount);
+			return "prepayment has been successful , the outstanding balance amount: " + (outstanding - amount);
 		
 		} else {
-			return "Cannot prepay ";
+			return "Cannot be prepaid ";
 		}
 
 	}

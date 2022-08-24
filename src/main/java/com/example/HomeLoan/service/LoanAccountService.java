@@ -56,12 +56,12 @@ public class LoanAccountService {
 	}
 	
 
-	public  double calculateEligibleLoanAmt(double salary) {
-		return salary * 50;
+	public  double maxAmountAsLoan(double salary) {
+		return salary*50;
 	}
 
-	public boolean isLoanEligible(double salary, double loanAmt) {
-		return salary * 50 >= loanAmt;
+	public boolean loanEligibility(double salary, double loanAmt) {
+		return salary*50 >= loanAmt;
 	}
 
 	public LoanAccount createLoanAccount(LoanAccount loanAcc, int user_id) {
@@ -71,7 +71,7 @@ public class LoanAccountService {
 		loanAcc.setStatus("Approved");
 		loanAcc = loanAccrepo.save(loanAcc);
 		Users user = userService.getUser(user_id).get();
-		//			emailService.sendEmail(user.getEmail(), "Congrats, Your Loan has been Approoved\n Your Accounnt id:"+loanAcc.getLoanAccId(), "Loan Accepted", "batchpb2a@gmail.com");
+		//			emailService.sendEmail(user.getEmail(), "Congrats, Your Loan has been Approved\n Your Account id:"+loanAcc.getLoanAccId(), "Loan Accepted", "batchpb2a@gmail.com");
 		populatePaymentDBforNewUser(loanAcc);
 		return loanAcc;
 		

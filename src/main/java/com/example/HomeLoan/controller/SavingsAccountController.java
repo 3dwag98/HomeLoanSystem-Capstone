@@ -1,14 +1,10 @@
 package com.example.HomeLoan.controller;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,29 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.service.SavingAccountService;
-import com.example.HomeLoan.service.utility;
 
 @RestController
-@RequestMapping("/saving-account")
-public class SavingAccountController {
+@RequestMapping("/savingsAccount")
+public class SavingsAccountController {
 	@Autowired
 	private SavingAccountService service;
 
-	
-	@Autowired
-	private utility util;
-	
 
-	@PostMapping(value = "/createSavingAccout")
+	@PostMapping(value = "/createSavingsAccount")
 	public ResponseEntity<?> createSavingAccount(@RequestBody SavingAccount SavingAccountobj, HttpSession session) {
 		try {
-			Map<String, Object> body = new LinkedHashMap<>();
 			return new ResponseEntity<>(service.saveBalance(SavingAccountobj, session), HttpStatus.OK);
 		} catch (Exception e) {
 
-			return new ResponseEntity<>("Error occurred during saving account creation", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Sorry. An error occured during savings account creation", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 
 	}
 
@@ -51,11 +40,10 @@ public class SavingAccountController {
 
 
 		try {
-			Map<String, Object> body = new LinkedHashMap<>();
 			return new ResponseEntity<>(this.service.getAccDetails(user_id), HttpStatus.OK);
 		} catch (Exception e) {
 
-			return new ResponseEntity<>("Error during apply loan", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Sorry. An error occured during loan application", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 

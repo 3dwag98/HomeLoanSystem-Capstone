@@ -10,7 +10,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,61 +28,50 @@ public class LoginController {
 	
 	
 	@GetMapping(value="/")
-	public ResponseEntity<?> home() {
-		return new ResponseEntity<>("Welcome to Barclays bank", HttpStatus.CREATED);	
+	public ResponseEntity<?> homePage() {
+		return new ResponseEntity<>("Welcome to the Home Loan portal", HttpStatus.CREATED);	
 	}
 	
 	
 	@PostMapping(value="/Users")
-	public ResponseEntity<?> createUser(@Valid @RequestBody Users user) {
+	public ResponseEntity<?> createUserAccount(@Valid @RequestBody Users user) {
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("user_obj", userService.createUser(user));
 		return new ResponseEntity<>(body, HttpStatus.CREATED);	
 	}
 		
 	
-	@GetMapping(value = "api/getuser/{userId}")
-	public ResponseEntity<?> getUser(@Valid @PathVariable int userId) {
+	@GetMapping(value = "api/Users/{userId}")
+	public ResponseEntity<?> getUserDetails(@Valid @PathVariable int userId) {
 		Map<String, Object> body = new LinkedHashMap<>();
 		body.put("user_obj",userService.getUser(userId));
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/login")
-	public ResponseEntity<?> loginUser(@RequestBody Auth authenticationDetails, HttpSession session){
-		Map<String, Object> body = new LinkedHashMap<>();
+	public ResponseEntity<?> UserLogin(@RequestBody Auth authenticationDetails, HttpSession session){
 		return new ResponseEntity<>(userService.login(authenticationDetails, session), HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/login")
-	public ResponseEntity<?> loginUser(){
-		return new ResponseEntity<>("Welcome to Barclays Bank login", HttpStatus.OK);
-		
-	}
+	
 	@PostMapping("/logout")
-	public ResponseEntity<?>  destroySession(HttpServletRequest request) {
+	public ResponseEntity<?> endSession(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return new ResponseEntity<>("logout", HttpStatus.OK);
+		return new ResponseEntity<>("you are logged out", HttpStatus.OK);
 	}
 	
 	
-	@PutMapping(value="/Users/{userId}")
-	public ResponseEntity<?> updateUser(@Valid @RequestBody Users user) {
+	@PutMapping(value="/updateUsers/{userId}")
+	public ResponseEntity<?> updateUserDetails(@Valid @RequestBody Users user) {
 		userService.updateUser(user);
-		return new ResponseEntity<>("User details updated succesfully", HttpStatus.OK);
+		return new ResponseEntity<>("Customer details have been successfully updated", HttpStatus.OK);
 		
 	}
 	
-	@DeleteMapping(value = "Delete/{userId}")
-	public ResponseEntity<?> deleteUser(@Valid @PathVariable Integer userId)
-	
-	{	
-		userService.deleteUser(userId);
-		return new ResponseEntity<>("User details deleted succesfully", HttpStatus.NO_CONTENT);
-	}
-	@GetMapping(value = "/allUser")
 
-	public ResponseEntity<?>  getAllUser() {
+	@GetMapping(value = "/allUsers")
+
+	public ResponseEntity<?>  getEveryUserDetails() {
 		return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
 
 	}
