@@ -231,7 +231,7 @@ public class LoanRepaymentService {
 			jdbcTemplate.update(
 					" update repayment set status='paid' where loan_account_id=? and id=?",
 					loanAccount.getLoanAccId(), repayId);
-			jdbcTemplate.update("update savingaccount set curr_balance=? where acc_no=?", balanceafterDeduction,
+			jdbcTemplate.update("update savings_Account set curr_balance=? where acc_no=?", balanceafterDeduction,
 					userAccount1.getAccountno());
 
 			return "EMI deduct success";

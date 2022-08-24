@@ -23,7 +23,6 @@ public interface SavingAccountRepositiory extends JpaRepository<SavingAccount, I
 
 	SavingAccount findByAccountno(Long accountno);
 
-	// Count of Rows code
 	@Query(value = "SELECT count(sequenceId) FROM SavingAccount r WHERE r.user.userId = :userid")
 	public long countofSA(long userid);
 
@@ -32,5 +31,7 @@ public interface SavingAccountRepositiory extends JpaRepository<SavingAccount, I
 	SavingAccount findBysequenceId(int sequenceId);
 
 	SavingAccount findBysequenceIdAndUser(int sequenceId, Users users);
+	
+	SavingAccount findByAccountno(int accountno);
 
 }

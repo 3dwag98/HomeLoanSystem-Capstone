@@ -7,16 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 
 @Data
 @Entity
 @Table(name = "loan_account")
-/*@AllArgsConstructor
-@NoArgsConstructor*/
+
 public class LoanAccount {
 	
 	@Id
@@ -26,45 +23,35 @@ public class LoanAccount {
 	
 
 	@Column(name = "saving_acc_no")
-	@NotNull(message = "please select saving account")
 	private int accountNo;
 	
 	@Override
 	public String toString() {
 		return "LoanAccount [loanAccId=" + loanAccId + ", accountNo=" + accountNo + ", amount=" + amount
 				+ ", interestRate=" + interestRate + ", salary=" + salary + ", year=" + year + ", month=" + month
-				+ ", description=" + description + ", status=" + status + ", file=" + file + "]";
+				+ ", address=" + address + ", status=" + status + "]";
 	}
 
-	@NotNull(message = "please fill loan_amount")
 	@Column(name="loan_amount")
 	private Double amount;
 	
-	@NotNull(message = "please fill interest rate")
 	@Column(name="interest_rate")
 	private Double interestRate;
 	
-	@NotNull(message = "please fill salary")
 	@Column(name="salary")
 	private Double salary;
 	
-	@NotNull(message = "please fill year")
 	@Column(name="year")
 	private int year; 
 	
-	@NotNull(message = "please fill month")
 	@Column(name="month")
 	private int month; 
 	
-	@NotBlank(message = "please fill address")
-	@Lob  //Large Objects
-	private String description;
+	@Lob 
+	private String address;
 	
 	@Column(name="status")
 	private String status;
-	
-	@Column
-	private String file;
 
 	
 	
@@ -74,7 +61,7 @@ public class LoanAccount {
 
 
 	public LoanAccount(Integer loanAccId, int accountNo, Double amount, Double interestRate, Double salary, int year,
-			int month, String description, String status, String file) {
+			int month, String address, String status) {
 		super();
 		this.loanAccId = loanAccId;
 		this.accountNo = accountNo;
@@ -83,9 +70,8 @@ public class LoanAccount {
 		this.salary = salary;
 		this.year = year;
 		this.month = month;
-		this.description = description;
+		this.address = address;
 		this.status = status;
-		this.file = file;
 	}
 
 
@@ -151,12 +137,12 @@ public class LoanAccount {
 	}
 
 
-	public String getDescription() {
-		return description;
+	public String getaddress() {
+		return address;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void seta(String address) {
+		this.address = address;
 	}
 
 	public String getStatus() {
@@ -167,12 +153,5 @@ public class LoanAccount {
 		this.status = status;
 	}
 
-	public String getFile() {
-		return file;
-	}
-
-	public void setFile(String file) {
-		this.file = file;
-	}
 
 }

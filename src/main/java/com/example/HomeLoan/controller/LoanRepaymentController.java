@@ -42,8 +42,8 @@ public class LoanRepaymentController {
 	@Autowired
 	private utility util;
 
-	@GetMapping(value = "/loanscheduler")
-	public ResponseEntity<?> findLoandetais(HttpSession session) {
+	@GetMapping(value = "/loanschedule")
+	public ResponseEntity<?> loanScheduler(HttpSession session) {
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
 			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
 		Map<String, Object> body = new LinkedHashMap<>();
@@ -51,8 +51,8 @@ public class LoanRepaymentController {
 		return new ResponseEntity<>(body, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/loanscheduler/{id}/")
-	public ResponseEntity<?> findLoanSchedulebyID(@Valid @PathVariable int id,HttpSession session) {
+	@PostMapping(value = "/loanschedule/{id}/")
+	public ResponseEntity<?> loanScheduler(@Valid @PathVariable int id,HttpSession session) {
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
 			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
 		Map<String, Object> body = new LinkedHashMap<>();
@@ -61,7 +61,7 @@ public class LoanRepaymentController {
 	}
 
 	@PostMapping(value = "/loanndetails/{id}/")
-	public ResponseEntity<?> findLoandetaisbyID(@Valid @PathVariable int id,HttpSession session) {	
+	public ResponseEntity<?> loanDetails(@Valid @PathVariable int id,HttpSession session) {	
 		if(util.sessionCheck(session).getStatusCodeValue()==405)
 			return new ResponseEntity<>("please login!", HttpStatus.METHOD_NOT_ALLOWED);
 		Map<String, Object> body = new LinkedHashMap<>();

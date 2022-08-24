@@ -34,7 +34,7 @@ public class SavingAccountService {
 		int user_id = (int) session.getAttribute("user_id");
 	    Random rnd = new Random();
 	    int number = rnd.nextInt(999999);
-	    savAccObj.setAccountno("SAVACC"+String.valueOf(number));
+	    savAccObj.setAccountno(number);
 	    Optional<Users> user = userRepository.findById(user_id);
 	    if(user.get()!=null) {
 	    	savAccObj.setUser(user.get());

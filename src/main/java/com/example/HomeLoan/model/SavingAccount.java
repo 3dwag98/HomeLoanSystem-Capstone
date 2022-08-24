@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "savingaccount")
+@Table(name = "savings_Account")
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -30,7 +30,7 @@ public class SavingAccount {
 		
 	@Column(name = "acc_no", unique = true)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String accountno;
+	private int accountno;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id",referencedColumnName = "user_id")
@@ -48,11 +48,11 @@ public class SavingAccount {
 		this.sequenceId = sequenceId;
 	}
 
-	public String getAccountno() {
+	public int getAccountno() {
 		return accountno;
 	}
 
-	public void setAccountno(String accountno) {
+	public void setAccountno(int accountno) {
 		this.accountno = accountno;
 	}
 
