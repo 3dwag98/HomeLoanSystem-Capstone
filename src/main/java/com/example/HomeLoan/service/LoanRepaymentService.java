@@ -1,29 +1,22 @@
 package com.example.HomeLoan.service;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.mail.MessagingException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
 import com.example.HomeLoan.model.LoanAccount;
 import com.example.HomeLoan.model.Repayment;
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.LoanAccountRepository;
-//import com.example.HomeLoan.repo.LoanRepayScheduleRepository;
-//import com.example.HomeLoan.repo.LoanScheduleRepository;
 import com.example.HomeLoan.repo.RepaymentRepository;
 import com.example.HomeLoan.repo.SavingAccountRepositiory;
 
@@ -52,7 +45,7 @@ public class LoanRepaymentService {
 	}
 
 	public LoanAccount getLoanAccountById(int id) {
-//		LoanAccount LoanAccountdetails = loanaccountRepo.findById(LoanId);
+		
 		return loanaccountRepo.findByLoanAccId(id);
 	}
 
@@ -63,7 +56,6 @@ public class LoanRepaymentService {
 	public String updateRepayment(int LoanId) {
 
 		List<Repayment> existingPayment = loanRepaymentRepo.findRepaymentDetailsByAccountNo(LoanId);
-//		int count = 0;
 		int count = 0;
 		for (Repayment product : existingPayment) {
 			logger.info(product.getStatus());
@@ -88,8 +80,7 @@ public class LoanRepaymentService {
 		} else {
 			return "The EMI has been paid in less than 3 months";
 		}
-
-//		return existingPayment;
+		
 	}
 
 	public double calInterest(double outstanding, double mothlyRateOfInterest) {
@@ -124,13 +115,13 @@ public class LoanRepaymentService {
 		double p = principleAmount;
 		double r = interestRate * 0.01 / 12;
 		double t = (year * 12) + month;
-		double emi = pesObj.calMonthlyEmi(p, r, t); // emi = (p*r*Math.pow(1+r,t))/(Math.pow(1+r,t)-1);
+		double emi = pesObj.calMonthlyEmi(p, r, t); 
 
 		double outstanding = p;
 
 		for (int i = 0; i < t + 1; i++) {
-			double mInterest = pesObj.calInterest(outstanding, r);// rate is monthly //= outstanding * r;
-			double paidPrinciple = pesObj.calPaidPrinciple(emi, mInterest);// emi - mInterest;
+			double mInterest = pesObj.calInterest(outstanding, r);
+			double paidPrinciple = pesObj.calPaidPrinciple(emi, mInterest);
 			outstanding = outstanding - paidPrinciple;
 
 			Repayment obj = new Repayment();

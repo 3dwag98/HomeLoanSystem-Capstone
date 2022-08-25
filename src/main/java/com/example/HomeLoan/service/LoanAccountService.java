@@ -1,10 +1,7 @@
 package com.example.HomeLoan.service;
 
-import java.io.UnsupportedEncodingException;
+
 import java.util.List;
-
-import javax.mail.MessagingException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +68,6 @@ public class LoanAccountService {
 		loanAcc.setStatus("Approved");
 		loanAcc = loanAccrepo.save(loanAcc);
 		Users user = userService.getUser(user_id).get();
-		//			emailService.sendEmail(user.getEmail(), "Congrats, Your Loan has been Approved\n Your Account id:"+loanAcc.getLoanAccId(), "Loan Accepted", "batchpb2a@gmail.com");
 		populatePaymentDBforNewUser(loanAcc);
 		return loanAcc;
 		

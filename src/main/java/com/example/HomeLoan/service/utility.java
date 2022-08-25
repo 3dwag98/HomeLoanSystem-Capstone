@@ -44,7 +44,6 @@ public class utility {
 	}
 	
     public ResponseEntity<?> sessionCheck(HttpSession session) {
-        // your code
 		Map<String, Object> body = new LinkedHashMap<>();
 		if (session.getAttribute("user_id") == null) {
 			body.put("ERROR","Please login");

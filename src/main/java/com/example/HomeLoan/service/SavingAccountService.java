@@ -1,24 +1,15 @@
 package com.example.HomeLoan.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
-
 import java.util.Random;
-
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.example.HomeLoan.model.SavingAccount;
 import com.example.HomeLoan.model.Users;
 import com.example.HomeLoan.repo.SavingAccountRepositiory;
 import com.example.HomeLoan.repo.UserRepository;
-import com.example.HomeLoan.service.LoanAccountService;
 
 @Service
 public class SavingAccountService {

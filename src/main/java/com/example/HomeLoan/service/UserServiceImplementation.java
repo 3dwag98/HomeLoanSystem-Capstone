@@ -21,7 +21,6 @@ public class UserServiceImplementation implements UserService{
 	
 	@Override
 	public Users createUser(Users user) {
-		// TODO Auto-generated method stub
 		return userRepository.save(user);
 	}
 
@@ -32,7 +31,6 @@ public class UserServiceImplementation implements UserService{
 
 	@Override
 	public void updateUser(Users user) {
-		// TODO Auto-generated method stub
 	    userRepository.save(user);
 	}
 
@@ -40,13 +38,11 @@ public class UserServiceImplementation implements UserService{
 
 	@Override
 	public List<Users> getAllUser() {
-		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
 
 	@Override
 	public void deleteUser(Integer userId) {
-		// TODO Auto-generated method stub
 		
 		userRepository.deleteById(userId);
 		
@@ -55,7 +51,6 @@ public class UserServiceImplementation implements UserService{
 
 	@Override
 	public String login(Auth authenticationDetails,HttpSession session) {
-		// TODO Auto-generated method stub
 		Users user = userRepository.findByEmail(authenticationDetails.getEmailId());
 		
 		if(user != null) {
